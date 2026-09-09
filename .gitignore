@@ -1,0 +1,8 @@
+node_modules
+dist
+server/shop.db
+server/shop.db-shm
+server/shop.db-wal
+.env
+.DS_Store
+src/assets/
