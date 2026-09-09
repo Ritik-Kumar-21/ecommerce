@@ -9,8 +9,10 @@ function getSessionId() {
   return id;
 }
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 async function request(url, options = {}) {
-  const res = await fetch(url, {
+  const res = await fetch(`${API_BASE}${url}`, {
     ...options,
     credentials: 'include',
     headers: {

@@ -9,7 +9,7 @@ const app = express();
 const PORT = 3001;
 const JWT_SECRET = 'shopvibe-secret-key-' + crypto.randomUUID();
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -106,13 +106,17 @@ app.get('/api/auth/me', (req, res) => {
 // ============ PRODUCTS ============
 
 app.get('/api/products', (req, res) => {
-  const { category, search } = req.query;
+  const { category, search, source } = req.query;
   let query = 'SELECT * FROM products WHERE 1=1';
   const params = [];
 
   if (category) {
     query += ' AND category = ?';
     params.push(category);
+  }
+  if (source) {
+    query += ' AND source = ?';
+    params.push(source);
   }
   if (search) {
     query += ' AND (name LIKE ? OR description LIKE ?)';

@@ -4,6 +4,14 @@ import { useCart } from '../context/CartContext';
 import { api } from '../lib/api';
 import { Lock, ArrowLeft } from 'lucide-react';
 
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+
 export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
@@ -113,7 +121,7 @@ export default function Checkout() {
             className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
           >
             <Lock className="w-5 h-5" />
-            {loading ? 'Processing...' : `Place Order — $${totalPrice.toFixed(2)}`}
+            {loading ? 'Processing...' : `Place Order — ${formatPrice(totalPrice)}`}
           </button>
 
           <p className="text-center text-sm text-gray-500">
@@ -137,7 +145,7 @@ export default function Checkout() {
                   <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                 </div>
                 <p className="text-sm font-bold text-gray-900">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {formatPrice(item.price * item.quantity)}
                 </p>
               </div>
             ))}
@@ -145,7 +153,7 @@ export default function Checkout() {
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <span className="font-medium text-gray-600">Total</span>
-              <span className="text-xl font-bold text-gray-900">${totalPrice.toFixed(2)}</span>
+              <span className="text-xl font-bold text-gray-900">{formatPrice(totalPrice)}</span>
             </div>
           </div>
         </div>

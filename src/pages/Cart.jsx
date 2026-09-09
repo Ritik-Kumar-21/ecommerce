@@ -2,6 +2,14 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from 'lucide-react';
 
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+
 export default function Cart() {
   const { items, loading, updateQuantity, removeItem, totalItems, totalPrice } = useCart();
 
@@ -59,7 +67,7 @@ export default function Cart() {
               >
                 {item.name}
               </Link>
-              <p className="text-indigo-600 font-bold mt-1">${item.price.toFixed(2)}</p>
+              <p className="text-indigo-600 font-bold mt-1">{formatPrice(item.price)}</p>
             </div>
 
             <div className="flex items-center border border-gray-300 rounded-lg">
@@ -81,8 +89,8 @@ export default function Cart() {
               </button>
             </div>
 
-            <p className="hidden sm:block text-lg font-bold text-gray-900 w-24 text-right">
-              ${(item.price * item.quantity).toFixed(2)}
+            <p className="hidden sm:block text-lg font-bold text-gray-900 w-28 text-right">
+              {formatPrice(item.price * item.quantity)}
             </p>
 
             <button
@@ -100,7 +108,7 @@ export default function Cart() {
           <span className="text-gray-600">
             Subtotal ({totalItems} {totalItems === 1 ? 'item' : 'items'})
           </span>
-          <span className="text-2xl font-bold text-gray-900">${totalPrice.toFixed(2)}</span>
+          <span className="text-2xl font-bold text-gray-900">{formatPrice(totalPrice)}</span>
         </div>
         <p className="text-sm text-gray-500 mt-1">Shipping and taxes calculated at checkout.</p>
 

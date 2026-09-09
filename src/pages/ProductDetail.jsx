@@ -3,7 +3,15 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, ShoppingCart, Check, Minus, Plus, Star, Trash2 } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, Minus, Plus, Star, Trash2, ExternalLink } from 'lucide-react';
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(price);
+};
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -89,6 +97,13 @@ export default function ProductDetail() {
     );
   }
 
+  const sourceBadge = {
+    amazon: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Available on Amazon' },
+    flipkart: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Available on Flipkart' },
+    shopvibe: { bg: 'bg-indigo-100', text: 'text-indigo-700', label: 'ShopVibe Exclusive' },
+  };
+  const badge = sourceBadge[product.source] || sourceBadge.shopvibe;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Link to="/" className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-900 mb-6 transition-colors">
@@ -96,8 +111,11 @@ export default function ProductDetail() {
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-        <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100">
+        <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100 relative">
           <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          <span className={`absolute top-4 left-4 ${badge.bg} ${badge.text} text-sm font-bold px-3 py-1.5 rounded-full`}>
+            {badge.label}
+          </span>
         </div>
 
         <div className="flex flex-col">
@@ -119,19 +137,22 @@ export default function ProductDetail() {
             </span>
           </div>
 
-          <p className="mt-4 text-3xl font-bold text-gray-900">${product.price.toFixed(2)}</p>
+          <p className="mt-4 text-3xl font-bold text-gray-900">{formatPrice(product.price)}</p>
+          <p className="mt-1 text-sm text-gray-400">Inclusive of all taxes</p>
           <p className="mt-4 text-gray-600 leading-relaxed">{product.description}</p>
 
           <div className="mt-6">
             {product.stock > 0 ? (
-              <p className="text-sm text-green-600 font-medium">✓ In stock ({product.stock} available)</p>
+              <p className="text-sm text-green-600 font-medium">
+                ✓ In stock — {product.stock} units available
+              </p>
             ) : (
               <p className="text-sm text-red-500 font-medium">Out of stock</p>
             )}
           </div>
 
           <div className="mt-6 flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-700">Quantity:</span>
+            <span className="text-sm font-medium text-gray-700">Qty:</span>
             <div className="flex items-center border border-gray-300 rounded-lg">
               <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-2 hover:bg-gray-100 transition-colors rounded-l-lg">
                 <Minus className="w-4 h-4" />
@@ -150,7 +171,7 @@ export default function ProductDetail() {
               added ? 'bg-green-500 text-white' : product.stock === 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95'
             }`}
           >
-            {added ? (<><Check className="w-5 h-5" /> Added to Cart!</>) : (<><ShoppingCart className="w-5 h-5" /> Add to Cart — ${(product.price * quantity).toFixed(2)}</>)}
+            {added ? (<><Check className="w-5 h-5" /> Added to Cart!</>) : (<><ShoppingCart className="w-5 h-5" /> Add to Cart — {formatPrice(product.price * quantity)}</>)}
           </button>
         </div>
       </div>

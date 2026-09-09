@@ -5,7 +5,7 @@ import { api } from '../lib/api';
 import {
   Package,
   ShoppingCart,
-  DollarSign,
+  IndianRupee,
   Users,
   Clock,
   Plus,
@@ -14,6 +14,14 @@ import {
   X,
   BarChart3,
 } from 'lucide-react';
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(price);
+};
 
 export default function Admin() {
   const { user, loading: authLoading } = useAuth();
@@ -146,7 +154,7 @@ export default function Admin() {
           {/* Dashboard Tab */}
           {tab === 'dashboard' && stats && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatCard icon={<DollarSign />} label="Revenue" value={`$${stats.totalRevenue.toFixed(2)}`} color="green" />
+              <StatCard icon={<IndianRupee />} label="Revenue" value={formatPrice(stats.totalRevenue)} color="green" />
               <StatCard icon={<ShoppingCart />} label="Orders" value={stats.totalOrders} color="blue" />
               <StatCard icon={<Package />} label="Products" value={stats.totalProducts} color="purple" />
               <StatCard icon={<Users />} label="Users" value={stats.totalUsers} color="orange" />
@@ -199,7 +207,7 @@ export default function Admin() {
                           </div>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-600">{p.category}</td>
-                        <td className="px-4 py-3 text-sm font-medium">${p.price.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm font-medium">{formatPrice(p.price)}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`text-sm font-medium ${
@@ -250,7 +258,7 @@ export default function Admin() {
                       <tr key={o.id} className="hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium text-gray-900">#{o.id}</td>
                         <td className="px-4 py-3 text-sm text-gray-600">{o.customer_name}</td>
-                        <td className="px-4 py-3 text-sm font-medium">${o.total.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm font-medium">{formatPrice(o.total)}</td>
                         <td className="px-4 py-3">
                           <select
                             value={o.status}
