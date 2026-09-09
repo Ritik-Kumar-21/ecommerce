@@ -1,19 +1,20 @@
 {
   "name": "shop",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "node server/index.js & vite",
     "dev:frontend": "vite",
     "dev:backend": "node server/index.js",
     "build": "vite build",
+    "start": "node server/index.js",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "bcryptjs": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "better-sqlite3": "^13.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
